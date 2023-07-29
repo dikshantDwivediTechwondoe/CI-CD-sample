@@ -16,6 +16,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Configure Git identity
+      - name: Configure Git identity
+        run: |
+          git config user.email "iam.dikshant.dwivedi@gmail.com"
+          git config user.name "dikshant dwivedi"
+
       # Semantic versioning
       - name: Bump Version and Create Release
         run: npm run release
