@@ -1,0 +1,27 @@
+name: ON_PUSH
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy-to-staging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Semantic versioning
+      - name: Bump Version and Create Release
+        run: npm run release
+
+      - name: Deploy to Staging
+        run: |
+          # Use the updated version in the deployment process
+          VERSION=$(node -p "require('./package.json').version")
+          echo "Deploying version $VERSION to Staging environment..."
