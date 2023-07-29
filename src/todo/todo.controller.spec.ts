@@ -58,5 +58,35 @@ describe('TodoController', () => {
     expect(result).toBe(todos);
   });
 
-  // Add more test cases for other controller methods if needed
+  describe('updateCompletionStatus', () => {
+    it('should update the completion status of a Todo item', () => {
+      const existingTodo: Todo = {
+        id: 1,
+        title: 'Todo 1',
+        description: 'Description 1',
+        completed: false,
+      };
+      const updatedTodo: Todo = {
+        ...existingTodo,
+        completed: true,
+      };
+
+      jest.spyOn(service, 'findById').mockReturnValue(existingTodo);
+      jest
+        .spyOn(service, 'updateCompletionStatus')
+        .mockReturnValue(updatedTodo);
+
+      const result = controller.updateCompletionStatus(1, true);
+
+      expect(result).toBe(updatedTodo);
+    });
+
+    it('should return null if the Todo item with the given ID is not found', () => {
+      jest.spyOn(service, 'findById').mockReturnValue(null);
+
+      const result = controller.updateCompletionStatus(1, true);
+
+      expect(result).toBe(null);
+    });
+  });
 });

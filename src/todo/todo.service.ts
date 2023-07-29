@@ -45,4 +45,12 @@ export class TodoService {
     }
     return null;
   }
+
+  updateCompletionStatus(id: number, completed: boolean): Todo {
+    const todo = this.findById(id);
+    if (todo) {
+      todo.completed = completed;
+    }
+    return todo;
+  }
 }

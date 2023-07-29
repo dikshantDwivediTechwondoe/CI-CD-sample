@@ -8,6 +8,7 @@ import {
   Param,
   Put,
   Delete,
+  Patch,
 } from '@nestjs/common';
 import { Todo } from './todo.model';
 import { TodoService } from './todo.service';
@@ -39,5 +40,13 @@ export class TodoController {
   @Delete(':id')
   delete(@Param('id') id: number): Todo {
     return this.todoService.delete(Number(id));
+  }
+
+  @Patch(':id/completed')
+  updateCompletionStatus(
+    @Param('id') id: number,
+    @Body('completed') completed: boolean,
+  ): Todo {
+    return this.todoService.updateCompletionStatus(id, completed);
   }
 }
