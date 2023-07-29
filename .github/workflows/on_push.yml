@@ -34,6 +34,6 @@ jobs:
 
       # Push changes back to the repository using the Personal Access Token
       - name: Push Changes
-        run: git push --follow-tags "https://$GH_TOKEN@github.com/<YOUR_GITHUB_USERNAME>/CI-CD-sample.git"
+        run: git push --follow-tags "https://$GH_TOKEN@github.com/dikshantDwivediTechwondoe/CI-CD-sample.git"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
