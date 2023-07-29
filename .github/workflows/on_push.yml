@@ -31,3 +31,9 @@ jobs:
           # Use the updated version in the deployment process
           VERSION=$(node -p "require('./package.json').version")
           echo "Deploying version $VERSION to Staging environment..."
+
+      # Push changes back to the repository using the Personal Access Token
+      - name: Push Changes
+        run: git push --follow-tags "https://$GH_TOKEN@github.com/<YOUR_GITHUB_USERNAME>/CI-CD-sample.git"
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
