@@ -27,27 +27,25 @@ jobs:
       - name: Bump Version and Create Release
         run: npm run release
 
-      - name: Determine .env file path
+      - name: Set path variable
+        id: path
         run: |
-          # Determine the path for the .env file based on the branch name
-          if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
-            export ENV_FILE_PATH = dev.env
-          elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
-            export ENV_FILE_PATH = prod.env
-          else
-            echo "Unsupported branch"
-            exit 1
-          fi
-
-          echo "Using .env file: $ENV_FILE_PATH"
-
-      - name: Check if ENV_FILE_PATH is accessible
-        run: test -f $ENV_FILE_PATH
+          path=$(
+            if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
+              echo "dev.env"
+            elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
+              echo "prod.env"
+            else
+              echo "Unsupported branch"
+              exit 1
+            fi
+          )
+          echo "::set-output name=path::$path"
 
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
         with:
-          path: dev.env
+          path: ${{ steps.path.outputs.path }}
           log-variables: true
           export-variables: true
 
