@@ -1,6 +1,6 @@
 {
   "name": "CI-CD-sample",
-  "version": "0.0.17",
+  "version": "0.0.18",
   "description": "",
   "author": "",
   "private": true,
@@ -19,7 +19,7 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "release": "standard-version",
-    "postrelease": "git push --follow-tags origin develop"
+    "postrelease": "BRANCH=$(echo ${GITHUB_REF#refs/heads/}); if [ \"$BRANCH\" = \"develop\" ]; then git push --follow-tags origin develop; elif [ \"$BRANCH\" = \"production\" ]; then git push --follow-tags origin production; else echo \"Unsupported branch\"; exit 1; fi"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
