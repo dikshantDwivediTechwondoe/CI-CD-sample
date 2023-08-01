@@ -40,11 +40,13 @@ jobs:
               exit 1
             fi
           )
+          env:
+            path: $path
 
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
         with:
-          path: ${{ steps.path.outputs.path }}
+          path: ${{ env.path }}
           log-variables: true
           export-variables: true
 
