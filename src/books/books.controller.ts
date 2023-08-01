@@ -7,25 +7,51 @@ import {
   Body,
   Param,
 } from '@nestjs/common';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiProperty,
+} from '@nestjs/swagger';
 
+// Define a model interface for the book
+export class Book {
+  @ApiProperty()
+  id: number;
+
+  @ApiProperty()
+  title: string;
+
+  @ApiProperty()
+  author: string;
+}
+
+@ApiTags('books')
 @Controller('books')
 export class BooksController {
-  private books: { id: number; title: string; author: string }[] = [];
+  private books: Book[] = [];
 
   @Get()
-  getAllBooks() {
+  @ApiOperation({ summary: 'Get all books' })
+  @ApiResponse({ status: 200, description: 'Success', type: [Book] })
+  getAllBooks(): Book[] {
     return this.books;
   }
 
   @Get(':id')
-  getBookById(@Param('id') id: string) {
+  @ApiOperation({ summary: 'Get a book by ID' })
+  @ApiResponse({ status: 200, description: 'Success', type: Book })
+  @ApiResponse({ status: 404, description: 'Book not found' })
+  getBookById(@Param('id') id: string): Book {
     const bookId = parseInt(id, 10);
     return this.books.find((book) => book.id === bookId);
   }
 
   @Post()
-  createBook(@Body() book: { title: string; author: string }) {
-    const newBook = {
+  @ApiOperation({ summary: 'Create a new book' })
+  @ApiResponse({ status: 201, description: 'Created', type: Book })
+  createBook(@Body() book: { title: string; author: string }): Book {
+    const newBook: Book = {
       id: this.books.length + 1,
       ...book,
     };
@@ -34,10 +60,13 @@ export class BooksController {
   }
 
   @Put(':id')
+  @ApiOperation({ summary: 'Update a book by ID' })
+  @ApiResponse({ status: 200, description: 'Success', type: Book })
+  @ApiResponse({ status: 404, description: 'Book not found' })
   updateBook(
     @Param('id') id: string,
     @Body() book: { title: string; author: string },
-  ) {
+  ): Book {
     const bookId = parseInt(id, 10);
     const bookIndex = this.books.findIndex((book) => book.id === bookId);
     if (bookIndex >= 0) {
@@ -48,7 +77,10 @@ export class BooksController {
   }
 
   @Delete(':id')
-  deleteBook(@Param('id') id: string) {
+  @ApiOperation({ summary: 'Delete a book by ID' })
+  @ApiResponse({ status: 200, description: 'Success', type: Book })
+  @ApiResponse({ status: 404, description: 'Book not found' })
+  deleteBook(@Param('id') id: string): Book {
     const bookId = parseInt(id, 10);
     const bookIndex = this.books.findIndex((book) => book.id === bookId);
     if (bookIndex >= 0) {
