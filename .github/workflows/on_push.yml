@@ -44,7 +44,9 @@ jobs:
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
         with:
-          path: ${{ env.ENV_FILE_PATH }}
+          path: dev.env
+          log-variables: false
+          export-variables: true
 
       - name: Deploy to Staging
         run: |
