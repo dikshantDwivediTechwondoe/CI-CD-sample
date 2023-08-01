@@ -39,6 +39,8 @@ jobs:
             exit 1
           fi
 
+          echo "Using .env file: $ENV_FILE_PATH"
+
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
         with:
