@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - production
 
 jobs:
   deploy-to-staging:
@@ -26,14 +27,35 @@ jobs:
       - name: Bump Version and Create Release
         run: npm run release
 
+      - name: Set up environment
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
+            cp dev.env .env
+          elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
+            cp prod.env .env
+          else
+            echo "Unsupported branch"
+            exit 1
+          fi
+
+          # Load the environment variables from .env into the current environment
+          source .env
+
       - name: Deploy to Staging
         run: |
           # Use the updated version in the deployment process
           VERSION=$(node -p "require('./package.json').version")
           echo "Deploying version $VERSION to Staging environment..."
 
+          # Access the environment variable defined in the .env file during deployment
+          echo "Deployment message: $DEPLOY_MESSAGE"
+
       # Push changes back to the repository using the Personal Access Token
       - name: Push Changes
         run: git push --follow-tags "https://$GH_TOKEN@github.com/dikshantDwivediTechwondoe/CI-CD-sample.git"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      # Clean up environment file after deployment
+      - name: Clean up environment file
+        run: rm .env
