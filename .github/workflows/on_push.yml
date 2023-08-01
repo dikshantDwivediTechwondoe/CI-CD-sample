@@ -55,7 +55,7 @@ jobs:
           echo "Deploying version $VERSION to Staging environment..."
 
           # Access the environment variable defined in the .env file during deployment
-          echo "Deployment message: ${{ env.DEPLOY_MESSAGE }}"
+          echo "Deployment message: ${{ env.deploy_message }}"
           echo "Deployment message: ${{ steps.dotenv.outputs.generic }}"
 
       # Push changes back to the repository using the Personal Access Token
