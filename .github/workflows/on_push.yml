@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - develop
+      - production
 
 jobs:
   deploy-to-staging:
@@ -26,11 +27,36 @@ jobs:
       - name: Bump Version and Create Release
         run: npm run release
 
+      - name: Set path variable
+        id: path
+        run: |
+          path=$(
+            if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
+              echo "dev.env"
+            elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
+              echo "prod.env"
+            else
+              echo "Unsupported branch"
+              exit 1
+            fi
+          )
+          echo "path=$path" >> $GITHUB_ENV
+
+      - name: Set up environment
+        uses: falti/dotenv-action@v1.0.4
+        with:
+          path: ${{ env.path }}
+          log-variables: true
+          export-variables: true
+
       - name: Deploy to Staging
         run: |
           # Use the updated version in the deployment process
           VERSION=$(node -p "require('./package.json').version")
           echo "Deploying version $VERSION to Staging environment..."
+
+          # Access the environment variable defined in the .env file during deployment
+          echo "Deployment message: ${{ env.deploy_message }}"
 
       # Push changes back to the repository using the Personal Access Token
       - name: Push Changes

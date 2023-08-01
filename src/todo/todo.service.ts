@@ -1,5 +1,3 @@
-// src/todo/todo.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { Todo } from './todo.model';
 
