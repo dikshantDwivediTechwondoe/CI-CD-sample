@@ -31,9 +31,9 @@ jobs:
         run: |
           # Determine the path for the .env file based on the branch name
           if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
-            export ENV_FILE_PATH=dev.env
+            export ENV_FILE_PATH=${GITHUB_WORKSPACE}/dev.env
           elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
-            export ENV_FILE_PATH=prod.env
+            export ENV_FILE_PATH=${GITHUB_WORKSPACE}/prod.env
           else
             echo "Unsupported branch"
             exit 1
