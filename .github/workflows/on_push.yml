@@ -39,7 +39,7 @@ jobs:
           fi
 
           # Load the environment variables from .env into the current environment
-          source .env
+          npx dotenv -e .env
 
       - name: Deploy to Staging
         run: |
