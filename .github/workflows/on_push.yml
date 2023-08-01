@@ -40,7 +40,6 @@ jobs:
               exit 1
             fi
           )
-          echo "::set-output name=path::$path"
 
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
