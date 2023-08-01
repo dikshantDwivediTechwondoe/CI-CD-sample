@@ -31,15 +31,18 @@ jobs:
         run: |
           # Determine the path for the .env file based on the branch name
           if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
-            export ENV_FILE_PATH=${GITHUB_WORKSPACE}/dev.env
+            export ENV_FILE_PATH = dev.env
           elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
-            export ENV_FILE_PATH=${GITHUB_WORKSPACE}/prod.env
+            export ENV_FILE_PATH = prod.env
           else
             echo "Unsupported branch"
             exit 1
           fi
 
           echo "Using .env file: $ENV_FILE_PATH"
+
+      - name: Check if ENV_FILE_PATH is accessible
+        run: test -f $ENV_FILE_PATH
 
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
@@ -56,7 +59,6 @@ jobs:
 
           # Access the environment variable defined in the .env file during deployment
           echo "Deployment message: ${{ env.deploy_message }}"
-          echo "Deployment message: ${{ steps.dotenv.outputs.generic }}"
 
       # Push changes back to the repository using the Personal Access Token
       - name: Push Changes
