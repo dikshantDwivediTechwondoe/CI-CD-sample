@@ -45,7 +45,7 @@ jobs:
         uses: falti/dotenv-action@v1.0.4
         with:
           path: dev.env
-          log-variables: false
+          log-variables: true
           export-variables: true
 
       - name: Deploy to Staging
@@ -56,13 +56,10 @@ jobs:
 
           # Access the environment variable defined in the .env file during deployment
           echo "Deployment message: ${{ env.DEPLOY_MESSAGE }}"
+          echo "Deployment message: ${{ steps.dotenv.outputs.generic }}"
 
       # Push changes back to the repository using the Personal Access Token
       - name: Push Changes
         run: git push --follow-tags "https://$GH_TOKEN@github.com/dikshantDwivediTechwondoe/CI-CD-sample.git"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      # Clean up environment file after deployment
-      - name: Clean up environment file
-        run: rm .env
