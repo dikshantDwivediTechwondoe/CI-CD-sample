@@ -40,8 +40,7 @@ jobs:
               exit 1
             fi
           )
-          env:
-            path: $path
+          echo "path=$path" >> $GITHUB_ENV
 
       - name: Set up environment
         uses: falti/dotenv-action@v1.0.4
