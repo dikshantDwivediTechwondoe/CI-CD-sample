@@ -27,19 +27,22 @@ jobs:
       - name: Bump Version and Create Release
         run: npm run release
 
-      - name: Set up environment
+      - name: Determine .env file path
         run: |
-          if [[ "${GITHUB_REF}" == "refs/heads/develop" ]]; then
-            cp dev.env .env
-          elif [[ "${GITHUB_REF}" == "refs/heads/production" ]]; then
-            cp prod.env .env
+          # Determine the path for the .env file based on the branch name
+          if [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
+            export ENV_FILE_PATH=.env-dev
+          elif [[ "${GITHUB_REF}" == "refs/heads/prod" ]]; then
+            export ENV_FILE_PATH=.env-prod
           else
             echo "Unsupported branch"
             exit 1
           fi
 
-          # Load the environment variables from .env into the current environment
-          npx dotenv -e .env
+     - name: Set up environment
+        uses: falti/dotenv-action@v1.0.4
+        with:
+          path: ${{ env.ENV_FILE_PATH }}
 
       - name: Deploy to Staging
         run: |
@@ -48,7 +51,7 @@ jobs:
           echo "Deploying version $VERSION to Staging environment..."
 
           # Access the environment variable defined in the .env file during deployment
-          echo "Deployment message: $DEPLOY_MESSAGE"
+          echo "Deployment message: $ {{ env.DEPLOY_MESSAGE }} "
 
       # Push changes back to the repository using the Personal Access Token
       - name: Push Changes
