@@ -22,7 +22,7 @@ jobs:
             echo "ENV_NAME=production" >> $GITHUB_ENV
           fi
           # Replace $DEPLOY_MESSAGE_ENV with your actual deploy message variable
-          echo "DEPLOY_MESSAGE_ENV=${{ env.DEPLOY_MESSAGE_ENV }}" >> $GITHUB_ENV
+          echo "DEPLOY_MESSAGE_ENV=$DEPLOY_MESSAGE_ENV" >> $GITHUB_ENV
 
       - name: Deploy to Staging
         env:
